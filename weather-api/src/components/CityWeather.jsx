@@ -46,7 +46,15 @@ export default function CityWeather() {
           >
             {loading ? "..." : "Go"}
           </button>
+          
         </div>
+         <button
+            className="mt-6 bg-blue-400 rounded p-4 text-white hover:text-blue-800 transition-colors duration-200 font-medium"
+            onClick={() => navigate("/country")}
+          >
+            View all cities in a country
+          </button>
+          <button onClick={()=>navigate('/saved-data')}>View Saved Data</button>
       </div>
 
       {weather && (
@@ -55,13 +63,7 @@ export default function CityWeather() {
           <p className="text-5xl font-bold text-blue-600 mb-4">{weather.temp}°C</p>
           <p className="capitalize text-gray-600 font-medium text-lg flex items-center justify-center">
             <span className="mr-2 text-2xl">☀️</span>{weather.description}
-          </p>
-          <button
-            className="mt-6 text-blue-600 underline hover:text-blue-800 transition-colors duration-200 font-medium"
-            onClick={() => navigate("/country")}
-          >
-            View all cities in a country
-          </button>
+          </p> 
         </div>
       )}
     </div>
