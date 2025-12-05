@@ -5,18 +5,19 @@ export default function App() {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const fetchWeather = async () => {
-    if (!city) return;
-    setLoading(true);
-    try {
-      const res = await fetch(`http://localhost:3000/weather?city=${city}`);
-      const data = await res.json();
-      setWeather(data);
-    } catch (err) {
-      console.error(err);
-    }
-    setLoading(false);
-  };
+ const fetchWeather = async () => {
+  if (!city) return;
+  setLoading(true);
+  try {
+    const res = await fetch(`http://localhost:3000/api/weather/${city}`);
+    const weather = await res.json();
+    console.log(weather);
+    setWeather(weather.data);   // FIXED
+  } catch (err) {
+    console.error(err);
+  }
+  setLoading(false);
+};
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-6">

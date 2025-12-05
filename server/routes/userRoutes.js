@@ -1,20 +1,17 @@
-import express from 'express';
+import express from "express";
+import { getWeatherByCity } from "../controllers/weatherController.js";
+
 const router = express.Router();
 
-
+// GET all users (dummy)
 router.get("/", (req, res) => {
   res.json({
     message: "List of users",
-    users: []
+    users: [],
   });
 });
 
-router.get("/:id", (req, res) => {
-  const { id } = req.params;
-  res.json({
-    message: `User details for ID: ${id}`,
-    user: {}
-  });
-});
+// GET weather details for a city
+router.get("/weather/:city", getWeatherByCity);
 
 export default router;
