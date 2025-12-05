@@ -3,19 +3,36 @@ import React, { useEffect, useState } from "react";
 
 const FetchData = () => {
   const [weatherData, setWeatherData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const collectData = async () => {
       try {
         const res = await axios.get("http://localhost:3000/api/fetchDataPrevious");
-        setWeatherData(res.data.data); // <-- Save data in state
+        
+        // Flatten the data: extract all cities from all countries
+        const allCities = res.data.data.flatMap(countryData => 
+          countryData.weatherList.map(city => ({
+            ...city,
+            country: countryData.country, // Add country to each city
+            createdAt:new Date(countryData.createdAt).toLocaleString()
+          }))
+        );
+        
+        setWeatherData(allCities);
       } catch (error) {
         console.error("Error fetching saved data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    collectData(); // <-- Call once on page load
+    collectData();
   }, []);
+
+  if (loading) {
+    return <div className="p-6 text-center">Loading...</div>;
+  }
 
   return (
     <div className="p-6 min-h-screen bg-slate-100">
@@ -32,9 +49,14 @@ const FetchData = () => {
               key={index}
               className="bg-white p-5 rounded-xl shadow-md border border-gray-200"
             >
-              <h2 className="text-xl font-bold text-blue-700">
-                {item.city}
-              </h2>
+              <div className="flex justify-between items-start mb-2">
+                <h2 className="text-xl font-bold text-blue-700">
+                  {item.city}
+                </h2>
+                <span className="text-sm text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                  {item.country}
+                </span>
+              </div>
 
               {item.error ? (
                 <p className="text-red-500 mt-2 font-medium">{item.error}</p>
@@ -46,6 +68,7 @@ const FetchData = () => {
                   <p className="capitalize text-gray-600 mt-1">
                     {item.description}
                   </p>
+                  <p>date: {item.createdAt}</p>
                 </>
               )}
             </div>
