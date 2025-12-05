@@ -1,5 +1,3 @@
-import dotenv from "dotenv";
-dotenv.config(); // ← loads .env file
 
 import express from "express";
 import cors from "cors";
@@ -9,6 +7,15 @@ import connectDB from "./DB/connectDB.js";
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Only load dotenv in development
+if (process.env.NODE_ENV !== 'production') {
+  try {
+    const dotenv = await import('dotenv');
+    dotenv.config();
+  } catch (err) {
+    console.log('dotenv not available, using environment variables');
+  }
+}
 // Middleware
 app.use(cors());
 app.use(express.json());
